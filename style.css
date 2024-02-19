@@ -7,11 +7,12 @@
 
 body {
   background-color: antiquewhite;
-  height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
+  margin-top: 10rem;
+  padding: 20px;
 }
 .add-todo-container {
   width: 350px;
@@ -21,7 +22,7 @@ body {
   display: flex;
   justify-content: center;
 }
-.add-text {
+.new-todo {
   margin-right: 10px;
   border-radius: 5px;
   font-size: 1.2rem;
@@ -30,7 +31,7 @@ body {
   width: 100%;
 }
 
-.add-task {
+.add-todo {
   padding: 5px;
   width: 60px;
   border-radius: 5px;
@@ -41,30 +42,71 @@ body {
   margin-top: 20px;
   flex-direction: column;
   display: flex;
-  justify-content: center;
+
   width: 350px;
   border-radius: 5px;
 }
 
 .item-list {
   display: flex;
+  justify-content: space-between;
   padding: 10px;
   border-radius: 5px;
   background-color: white;
   margin: 5px;
+
+  /* align-items: center;
+  
+  text-align: center; */
+  /* justify-content: space-between; */
 }
 .item-list p {
-  padding-left: 10px;
+  margin-left: 5px;
 }
 
-.item p {
-  padding-left: 10px;
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.delete {
+.checkbox-btn {
+  margin-bottom: auto;
+
+  width: 20px;
+  height: 20px;
+
+  /* margin-top: 5px; */
+  /* left: 0; */
+  /* margin-bottom: auto;
+  position: sticky; */
+  /* margin-top: auto; */
+  /* width: 5px;
+  height: 5px; */
+  /*  */
+  /* margin-left: 0; */
+}
+.delete-btn {
+  margin-bottom: auto;
   margin-left: auto;
   width: 20px;
   height: 20px;
-  background: none;
+
+  /* margin-left: auto; */
+  /* width: 20px;
+  height: 20px; */
+  /* background: none;
+  border: none; */
+
+  /* color: rgb(163, 83, 83);
   border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer; */
+}
+
+@media screen and (max-width: 1024) {
+  .body {
+    background-color: black;
+  }
 }
