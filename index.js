@@ -71,7 +71,7 @@ const displayTodos = (todos) => {
 
 function countTodos() {
   let countComplete = 0;
-  countDoing = 0;
+  let countDoing = 0;
 
   for (const todo of todos) {
     if (todo.status === "doing") {
