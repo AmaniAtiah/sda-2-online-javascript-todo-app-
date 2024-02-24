@@ -133,7 +133,7 @@ function performSearch(query) {
   displayTodos(filteredTodos);
 }
 
-searchIcon.addEventListener("click", function () {
+searchInput.addEventListener("input", function () {
   const query = searchInput.value;
   performSearch(query);
 });
