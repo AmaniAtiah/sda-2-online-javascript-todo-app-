@@ -1,80 +1,141 @@
-const todoList = document.querySelector(".todo-list");
-const addButton = document.querySelector(".add-todo");
-const todoinput = document.querySelector(".new-todo");
+const btnAddElement = document.querySelector("#btnAdd");
+const listElement = document.querySelector(".list");
+const descriptionElement = document.getElementById("task");
+const countDoingElement = document.querySelector(".count-doing");
+const countCompletedElement = document.querySelector(".count-completed");
+const addTodoElement = document.querySelector(".add-todo");
 
-// const todoDelete = document.createElement("button");
+let todos = [];
 
-const todos = [];
+const loadData = () => {
+  if (localStorage.getItem("todos") != null) {
+    todos = JSON.parse(localStorage.getItem("todos"));
+  }
+};
+loadData();
 
-function displayTodos(todos) {
-  todoList.innerHTML = "";
-  if (todos.length === 0) {
-    console.log("empty");
-    const empty = document.createElement("div");
-    empty.classList.add("empty");
-    const noTodo = document.createElement("p");
-    noTodo.innerHTML = "No todos yet";
-    noTodo.appendChild(empty);
-    todoList.appendChild(noTodo);
-  } else {
-    for (let index = 0; index < todos.length; index++) {
-      const todoItem = document.createElement("div");
-      todoItem.classList.add("item-list");
+const saveLocalStorge = () => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
 
-      const tododesc = document.createElement("p");
-      tododesc.textContent = todos[index].description;
-      todoItem.appendChild(tododesc);
+btnAddElement.onclick = (event) => {
+  event.preventDefault();
+  if (btnAddElement.textContent === "Create") {
+    if (descriptionElement.value != "") {
+      const newTodo = {
+        description: descriptionElement.value,
+        status: "doing",
+      };
+      todos.push(newTodo);
+      addTodoElement.textContent = "";
+    } else {
+      addTodoElement.textContent = "please add a description";
+    }
+    displayTodos(todos);
+    descriptionElement.value = "";
 
-      const buttonContainer = document.createElement("div");
-      buttonContainer.classList.add("button-container");
+    saveLocalStorge();
+  }
+};
 
-      const inputCheckbox = document.createElement("input");
-      inputCheckbox.classList.add("checkbox-btn");
+const displayTodos = (todos) => {
+  listElement.innerHTML = "";
+  todos.forEach((todo, index) => {
+    const items = document.createElement("li");
+    items.classList.add(todo.status);
 
-      inputCheckbox.type = "checkbox";
-      inputCheckbox.checked = todos[index].completed;
-      buttonContainer.appendChild(inputCheckbox);
-      //   todoItem.appendChild(inputCheckbox);
+    items.innerHTML = `
+        <div class="complete-icon" onClick = "completeTodo(${index})">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+        
+      </div>
+      <div class="content">
+        ${todo.description}
+      </div>
+      <div class="icon-close">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" onClick = "deleteTodo(${index})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6m0 12L6 6"/>
+        </svg>
+        <svg class="w-6 h-6 text-gray-800 dark:text-white edit-icon" onClick = "updateTodo(${index})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
+        </svg>
+      </div>
+        `;
 
-      const todoDelete = document.createElement("button");
-      todoDelete.classList.add("delete-btn");
+    listElement.appendChild(items);
+  });
+  countTodos();
+};
 
-      const icon = document.createElement("i");
-      icon.classList.add("fa", "fa-trash");
-      todoDelete.appendChild(icon);
-      buttonContainer.appendChild(todoDelete);
-      todoItem.appendChild(buttonContainer);
-      //   todoItem.appendChild(todoDelete);
+function countTodos() {
+  let countComplete = 0;
+  countDoing = 0;
 
-      todoList.appendChild(todoItem);
+  for (const todo of todos) {
+    if (todo.status === "doing") {
+      countDoing++;
+    } else if (todo.status === "complete") {
+      countComplete++;
+    }
+  }
+  countDoingElement.textContent = `total number of todo items ${countDoing} (doing)`;
 
-      todoDelete.addEventListener("click", function () {
-        deleteTodo(index);
+  countCompletedElement.textContent = `total number of todo items ${countComplete} (completed)`;
+}
+
+const completeTodo = (index) => {
+  todos[index].status = "complete";
+  displayTodos(todos);
+  saveLocalStorge();
+};
+
+const updateTodo = (index) => {
+  btnAddElement.textContent = "Update";
+  descriptionElement.value = todos[index].description;
+
+  if (btnAddElement.textContent === "Update") {
+    if (descriptionElement.value) {
+      btnAddElement.addEventListener("click", function updateHandler() {
+        todos[index].description = descriptionElement.value;
+        displayTodos(todos);
+
+        btnAddElement.removeEventListener("click", updateHandler);
+
+        btnAddElement.textContent = "Create";
+        descriptionElement.value = "";
+        saveLocalStorge();
       });
     }
   }
-}
+};
 
-function addTodo() {
-  if (todoinput.value === "") {
-    alert("Please enter a todo");
-  } else {
-    const tododesc = todoinput.value.trim();
-    const todo = {
-      description: tododesc,
-      completed: false,
-    };
-    todos.push(todo);
+const deleteTodo = (index) => {
+  todos = todos.filter((task, newIndex) => {
+    return newIndex !== index;
+  });
 
-    displayTodos(todos);
-    todoinput.value = "";
-  }
-}
-function deleteTodo(index) {
-  todos.splice(index, 1);
   displayTodos(todos);
+  saveLocalStorge();
+};
+
+const searchIcon = document.querySelector(".search-icon");
+const searchInput = document.getElementById("searchInput");
+
+function performSearch(query) {
+  const filteredTodos = todos.filter((todo) =>
+    todo.description && query
+      ? todo.description.toLowerCase().includes(query.toLowerCase())
+      : false
+  );
+
+  displayTodos(filteredTodos);
 }
 
-addButton.addEventListener("click", addTodo);
+searchIcon.addEventListener("click", function () {
+  const query = searchInput.value;
+  performSearch(query);
+});
 
 displayTodos(todos);
