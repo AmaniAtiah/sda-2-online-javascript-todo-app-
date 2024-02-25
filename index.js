@@ -18,7 +18,7 @@ const saveLocalStorge = () => {
   localStorage.setItem("todos", JSON.stringify(todos));
 };
 
-btnAddElement.onclick = (event) => {
+btnAddElement.addEventListener("click", (event) => {
   event.preventDefault();
   if (btnAddElement.textContent === "Create") {
     if (descriptionElement.value != "") {
@@ -36,7 +36,7 @@ btnAddElement.onclick = (event) => {
 
     saveLocalStorge();
   }
-};
+});
 
 const displayTodos = (todos) => {
   listElement.innerHTML = "";
@@ -46,7 +46,7 @@ const displayTodos = (todos) => {
 
     items.innerHTML = `
         <div class="complete-icon" onClick = "completeTodo(${index})">
-        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white class="complete-icon" onClick = "completeTodo(${index})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
         </svg>
         
@@ -54,11 +54,11 @@ const displayTodos = (todos) => {
       <div class="content">
         ${todo.description}
       </div>
-      <div class="icon-close">
-        <svg class="w-6 h-6 text-gray-800 dark:text-white" onClick = "deleteTodo(${index})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <div class="icon">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white icon-close" onClick = "deleteTodo(${index})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6m0 12L6 6"/>
         </svg>
-        <svg class="w-6 h-6 text-gray-800 dark:text-white edit-icon" onClick = "updateTodo(${index})" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white edit-icon" onClick = "updateTodo(${index}, this)" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
         </svg>
       </div>
@@ -87,17 +87,24 @@ function countTodos() {
 
 const completeTodo = (index) => {
   todos[index].status = "complete";
+
   displayTodos(todos);
   saveLocalStorge();
 };
 
-const updateTodo = (index) => {
+const updateTodo = (index, editIcon) => {
   btnAddElement.textContent = "Update";
   descriptionElement.value = todos[index].description;
 
   if (btnAddElement.textContent === "Update") {
+    const iconCloseAndEdit = editIcon.closest(".icon");
+
+    if (iconCloseAndEdit) {
+      iconCloseAndEdit.remove();
+    }
+
     if (descriptionElement.value) {
-      btnAddElement.addEventListener("click", function updateHandler() {
+      btnAddElement.addEventListener("click", (updateHandler) => {
         todos[index].description = descriptionElement.value;
         displayTodos(todos);
 

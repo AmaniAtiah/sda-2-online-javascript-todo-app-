@@ -1,9 +1,12 @@
 body {
   margin: 0;
-  font-family: Poppins;
+  font-family: "Noto Serif", serif;
+
+  font-size: 15px;
   min-height: 100vh;
   background: linear-gradient(60deg, #eed6f5, #d3e6f3);
 }
+
 .container-todo {
   background-color: #fff5;
   width: 400px;
@@ -64,11 +67,12 @@ body {
   border: none;
   outline: none;
   resize: none;
-  font-family: Poppins;
+  font-family: "Noto Serif", serif;
 }
 
 .form form button {
-  font-family: Poppins;
+  font-family: "Noto Serif", serif;
+
   font-size: small;
   border-radius: 10px;
   background-color: #0d0112;
@@ -86,7 +90,7 @@ body {
   width: 20px;
 }
 
-.list li .icon-close svg {
+.list li .icon svg {
   width: 20px;
 }
 
@@ -105,7 +109,7 @@ body {
 }
 
 .list li .complete-icon,
-.list li .icon-close {
+.list li .icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -120,7 +124,7 @@ body {
   color: green;
 }
 
-.list li.complete .icon-close .edit-icon {
+.list li.complete .icon .edit-icon {
   display: none;
 }
 
