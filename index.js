@@ -104,7 +104,7 @@ const updateTodo = (index, editIcon) => {
     }
 
     if (descriptionElement.value) {
-      btnAddElement.addEventListener("click", (updateHandler) => {
+      const updateHandler = () => {
         todos[index].description = descriptionElement.value;
         displayTodos(todos);
 
@@ -113,7 +113,9 @@ const updateTodo = (index, editIcon) => {
         btnAddElement.textContent = "Create";
         descriptionElement.value = "";
         saveLocalStorge();
-      });
+      };
+
+      btnAddElement.addEventListener("click", updateHandler);
     }
   }
 };
